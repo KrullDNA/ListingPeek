@@ -26,6 +26,16 @@
 }
 
 /* -------------------------------------------------------------------------
+ * 1b. RTL — flip peek to the left edge
+ * ---------------------------------------------------------------------- */
+
+[dir="rtl"] .kdna-peek-active,
+.kdna-peek-active[dir="rtl"] {
+	padding-right: 0;
+	padding-left: var(--kdna-peek-width);
+}
+
+/* -------------------------------------------------------------------------
  * 2. Slick list — override the inline overflow:hidden set by Slick
  * ---------------------------------------------------------------------- */
 
@@ -55,21 +65,37 @@
 	transition: width 0.3s ease, opacity 0.3s ease;
 }
 
+/* RTL fade — flip to left edge with reversed gradient direction. */
+[dir="rtl"] .kdna-peek-active.kdna-peek-fade::after,
+.kdna-peek-active.kdna-peek-fade[dir="rtl"]::after {
+	right: auto;
+	left: 0;
+	background: linear-gradient(
+		to left,
+		transparent,
+		var(--kdna-peek-bg)
+	);
+}
+
 /* -------------------------------------------------------------------------
  * 4. Arrow navigation — keep arrows positioned within the visible content
  *    area, not the extended overflow area.
  * ---------------------------------------------------------------------- */
 
-.kdna-peek-active .jet-listing-grid__slider-icon {
-	/*
-	 * Shift arrows inward by the peek width so they sit inside the
-	 * visible content boundary rather than the padded overflow zone.
-	 */
-}
-
 /* Next arrow: pull it back from the right edge by the peek width. */
 .kdna-peek-active .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--next {
 	right: var(--kdna-peek-width);
+}
+
+/* RTL: flip — next arrow is on the left, prev arrow needs the offset. */
+[dir="rtl"] .kdna-peek-active .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--next,
+.kdna-peek-active[dir="rtl"] .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--next {
+	right: auto;
+}
+
+[dir="rtl"] .kdna-peek-active .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--prev,
+.kdna-peek-active[dir="rtl"] .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--prev {
+	left: var(--kdna-peek-width);
 }
 
 /* -------------------------------------------------------------------------
@@ -77,11 +103,14 @@
  * ---------------------------------------------------------------------- */
 
 .kdna-peek-active .jet-slick-dots {
-	/*
-	 * Offset dots to the left by half the peek width so they centre
-	 * over the visible content rather than the full padded container.
-	 */
 	padding-right: var(--kdna-peek-width);
+}
+
+/* RTL: offset dots on the left instead. */
+[dir="rtl"] .kdna-peek-active .jet-slick-dots,
+.kdna-peek-active[dir="rtl"] .jet-slick-dots {
+	padding-right: 0;
+	padding-left: var(--kdna-peek-width);
 }
 
 /* -------------------------------------------------------------------------
@@ -91,6 +120,7 @@
 
 .kdna-peek-active.kdna-peek-last-slide {
 	padding-right: 0;
+	padding-left: 0;
 }
 
 .kdna-peek-active.kdna-peek-last-slide.kdna-peek-fade::after {
@@ -102,12 +132,37 @@
 	right: 0;
 }
 
+[dir="rtl"] .kdna-peek-active.kdna-peek-last-slide .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--prev,
+.kdna-peek-active.kdna-peek-last-slide[dir="rtl"] .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--prev {
+	left: 0;
+}
+
 .kdna-peek-active.kdna-peek-last-slide .jet-slick-dots {
 	padding-right: 0;
+	padding-left: 0;
 }
 
 /* -------------------------------------------------------------------------
- * 7. Scroll Slider variant
+ * 7. Not-enough-items state — disable peek entirely when the grid has
+ *    fewer items than visible columns (class toggled by JS)
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active.kdna-peek-disabled {
+	padding-right: 0;
+	padding-left: 0;
+	overflow: visible;
+}
+
+.kdna-peek-active.kdna-peek-disabled .slick-list {
+	overflow: hidden !important;
+}
+
+.kdna-peek-active.kdna-peek-disabled.kdna-peek-fade::after {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * 8. Scroll Slider variant
  *    JetEngine's scroll slider uses .jet-listing-grid__scroll-slider
  *    instead of Slick. Same peek approach but simpler overflow handling.
  * ---------------------------------------------------------------------- */
@@ -117,4 +172,19 @@
 	overflow-y: hidden;
 	padding-right: var(--kdna-peek-width);
 	scroll-padding-right: var(--kdna-peek-width);
+}
+
+/* RTL scroll slider. */
+[dir="rtl"] .kdna-peek-active .jet-listing-grid__scroll-slider,
+.kdna-peek-active[dir="rtl"] .jet-listing-grid__scroll-slider {
+	padding-right: 0;
+	padding-left: var(--kdna-peek-width);
+	scroll-padding-right: 0;
+	scroll-padding-left: var(--kdna-peek-width);
+}
+
+/* Hide scroll-slider peek when scrolled to the end (toggled by JS). */
+.kdna-peek-active.kdna-peek-scroll-end .jet-listing-grid__scroll-slider {
+	padding-right: 0;
+	padding-left: 0;
 }
