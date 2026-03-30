@@ -188,3 +188,56 @@
 	padding-right: 0;
 	padding-left: 0;
 }
+
+/* -------------------------------------------------------------------------
+ * 9. Hide Default Arrows — hides the Listing Grid's built-in arrows
+ *    when the user opts for remote arrows instead.
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-hide-arrows .jet-listing-grid__slider-icon {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------
+ * 10. KDNA Remote Arrows widget — base layout styles.
+ *     All visual styling (colors, borders, shadows, radius) is handled
+ *     by Elementor's selector-based controls; these are structural only.
+ * ---------------------------------------------------------------------- */
+
+.kdna-remote-arrows {
+	display: flex;
+	align-items: center;
+}
+
+.kdna-remote-arrows--empty {
+	justify-content: center;
+	padding: 20px;
+	color: #93003c;
+	font-size: 13px;
+	background: #fef0f5;
+	border: 1px dashed #93003c;
+	border-radius: 4px;
+}
+
+.kdna-remote-arrows__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	border: none;
+	background: none;
+	box-sizing: border-box;
+	line-height: 1;
+	transition-property: color, background-color, border-color, box-shadow, transform;
+	transition-timing-function: ease;
+	transition-duration: 250ms;
+}
+
+.kdna-remote-arrows__btn:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.kdna-remote-arrows__btn svg {
+	fill: currentColor;
+}

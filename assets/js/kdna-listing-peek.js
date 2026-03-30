@@ -260,6 +260,9 @@
 		for (var i = 0; i < widgets.length; i++) {
 			initWidget(widgets[i]);
 		}
+
+		// Also initialise any remote arrows on the page.
+		initRemoteArrows();
 	}
 
 	/* -----------------------------------------------------------------
@@ -302,6 +305,85 @@
 		jQuery(document).on('elementor/frontend/widget/ready', function () {
 			setTimeout(initAllPeekWidgets, 100);
 		});
+	}
+
+	/* -----------------------------------------------------------------
+	 * Remote Arrows — connect remote prev/next buttons to a Listing
+	 * Grid slider via the shared data-kdna-connection-id /
+	 * data-kdna-remote-id attribute pair.
+	 * ----------------------------------------------------------------- */
+	function initRemoteArrows() {
+		var remotes = document.querySelectorAll('.kdna-remote-arrows[data-kdna-remote-id]');
+
+		for (var i = 0; i < remotes.length; i++) {
+			bindRemote(remotes[i]);
+		}
+	}
+
+	/**
+	 * Bind click handlers on a single remote arrows container.
+	 */
+	function bindRemote(remote) {
+		if (remote._kdnaRemoteBound) return;
+		remote._kdnaRemoteBound = true;
+
+		var connectionId = remote.getAttribute('data-kdna-remote-id');
+		if (!connectionId) return;
+
+		var prevBtn = remote.querySelector('.kdna-remote-arrows__btn--prev');
+		var nextBtn = remote.querySelector('.kdna-remote-arrows__btn--next');
+
+		if (prevBtn) {
+			prevBtn.addEventListener('click', function () {
+				triggerSlide(connectionId, 'prev');
+			});
+		}
+
+		if (nextBtn) {
+			nextBtn.addEventListener('click', function () {
+				triggerSlide(connectionId, 'next');
+			});
+		}
+	}
+
+	/**
+	 * Find the connected Listing Grid by connection ID and trigger
+	 * a Slick prev/next slide, or scroll the scroll-slider container.
+	 */
+	function triggerSlide(connectionId, direction) {
+		var grid = document.querySelector('[data-kdna-connection-id="' + connectionId + '"]');
+		if (!grid) return;
+
+		// Slick Slider mode.
+		if (typeof jQuery !== 'undefined') {
+			var $slider = jQuery(grid).find('.slick-slider');
+			if ($slider.length) {
+				if (direction === 'prev') {
+					$slider.slick('slickPrev');
+				} else {
+					$slider.slick('slickNext');
+				}
+				return;
+			}
+		}
+
+		// Scroll Slider mode — scroll by one item width.
+		var scrollContainer = grid.querySelector('.jet-listing-grid__scroll-slider');
+		if (scrollContainer) {
+			var firstChild = scrollContainer.firstElementChild;
+			var scrollAmount = firstChild ? firstChild.offsetWidth : 300;
+
+			if (direction === 'prev') {
+				scrollAmount = -scrollAmount;
+			}
+
+			// Flip direction for RTL.
+			if (isRTL) {
+				scrollAmount = -scrollAmount;
+			}
+
+			scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+		}
 	}
 
 	/* -----------------------------------------------------------------
