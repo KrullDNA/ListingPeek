@@ -1,1 +1,120 @@
-/* KDNA Listing Peek — front-end styles (populated in Session 2) */
+/*
+ * KDNA Listing Peek — front-end styles
+ *
+ * Adds a half-card peek effect to JetEngine Listing Grid sliders.
+ * All rules are scoped to .kdna-peek-active so existing grids are unaffected.
+ *
+ * CSS custom properties (set by JS on the widget wrapper):
+ *   --kdna-peek-width       : peek amount in px
+ *   --kdna-peek-fade-width  : gradient overlay width in px
+ *   --kdna-peek-bg          : background colour for fade (user-overridable, default white)
+ */
+
+/* -------------------------------------------------------------------------
+ * 1. Widget wrapper — becomes the new clip boundary
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active {
+	--kdna-peek-width: 60px;
+	--kdna-peek-fade-width: 40px;
+	--kdna-peek-bg: #ffffff;
+
+	position: relative;
+	overflow: hidden;
+	padding-right: var(--kdna-peek-width);
+	transition: padding 0.3s ease, overflow 0.3s ease;
+}
+
+/* -------------------------------------------------------------------------
+ * 2. Slick list — override the inline overflow:hidden set by Slick
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active .slick-list {
+	overflow: visible !important;
+}
+
+/* -------------------------------------------------------------------------
+ * 3. Fade gradient overlay (::after pseudo-element)
+ *    Only applied when .kdna-peek-fade is also present.
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active.kdna-peek-fade::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: var(--kdna-peek-fade-width);
+	height: 100%;
+	background: linear-gradient(
+		to right,
+		transparent,
+		var(--kdna-peek-bg)
+	);
+	pointer-events: none;
+	z-index: 10;
+	transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+/* -------------------------------------------------------------------------
+ * 4. Arrow navigation — keep arrows positioned within the visible content
+ *    area, not the extended overflow area.
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active .jet-listing-grid__slider-icon {
+	/*
+	 * Shift arrows inward by the peek width so they sit inside the
+	 * visible content boundary rather than the padded overflow zone.
+	 */
+}
+
+/* Next arrow: pull it back from the right edge by the peek width. */
+.kdna-peek-active .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--next {
+	right: var(--kdna-peek-width);
+}
+
+/* -------------------------------------------------------------------------
+ * 5. Dots navigation — centre relative to the visible content area
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active .jet-slick-dots {
+	/*
+	 * Offset dots to the left by half the peek width so they centre
+	 * over the visible content rather than the full padded container.
+	 */
+	padding-right: var(--kdna-peek-width);
+}
+
+/* -------------------------------------------------------------------------
+ * 6. Last-slide state — hide the peek/fade when there is nothing to peek
+ *    (class toggled by JS when on the last slide group)
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active.kdna-peek-last-slide {
+	padding-right: 0;
+}
+
+.kdna-peek-active.kdna-peek-last-slide.kdna-peek-fade::after {
+	opacity: 0;
+	width: 0;
+}
+
+.kdna-peek-active.kdna-peek-last-slide .jet-listing-grid__slider-icon.jet-listing-grid__slider-icon--next {
+	right: 0;
+}
+
+.kdna-peek-active.kdna-peek-last-slide .jet-slick-dots {
+	padding-right: 0;
+}
+
+/* -------------------------------------------------------------------------
+ * 7. Scroll Slider variant
+ *    JetEngine's scroll slider uses .jet-listing-grid__scroll-slider
+ *    instead of Slick. Same peek approach but simpler overflow handling.
+ * ---------------------------------------------------------------------- */
+
+.kdna-peek-active .jet-listing-grid__scroll-slider {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-right: var(--kdna-peek-width);
+	scroll-padding-right: var(--kdna-peek-width);
+}
