@@ -233,9 +233,14 @@
 	transition-duration: 250ms;
 }
 
-.kdna-remote-arrows__btn:focus-visible {
-	outline: 2px solid currentColor;
-	outline-offset: 2px;
+/* Force icon elements to be true flex children so they centre properly.
+   Offset custom properties (--kdna-icon-offset-x/y) let users nudge
+   each arrow's icon within the button via Elementor sliders. */
+.kdna-remote-arrows__btn i,
+.kdna-remote-arrows__btn svg {
+	display: block;
+	line-height: inherit;
+	translate: var(--kdna-icon-offset-x, 0px) var(--kdna-icon-offset-y, 0px);
 }
 
 .kdna-remote-arrows__btn svg {

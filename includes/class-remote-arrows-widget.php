@@ -421,6 +421,38 @@ class KDNA_Remote_Arrows_Widget extends \Elementor\Widget_Base {
 			)
 		);
 
+		// Icon offset sliders to nudge the icon within the button shape.
+		$this->add_responsive_control(
+			'kdna_ra_prev_offset_x',
+			array(
+				'label'      => __( 'Icon Horizontal Offset', 'kdna-listing-peek' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array( 'min' => -30, 'max' => 30, 'step' => 1 ),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .kdna-remote-arrows__btn--prev' => '--kdna-icon-offset-x: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'kdna_ra_prev_offset_y',
+			array(
+				'label'      => __( 'Icon Vertical Offset', 'kdna-listing-peek' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array( 'min' => -30, 'max' => 30, 'step' => 1 ),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .kdna-remote-arrows__btn--prev' => '--kdna-icon-offset-y: {{SIZE}}{{UNIT}};',
+				),
+				'separator'  => 'after',
+			)
+		);
+
 		$this->start_controls_tabs( 'kdna_ra_prev_tabs' );
 
 		$this->start_controls_tab(
@@ -503,6 +535,38 @@ class KDNA_Remote_Arrows_Widget extends \Elementor\Widget_Base {
 				'type'            => \Elementor\Controls_Manager::RAW_HTML,
 				'raw'             => __( 'Override styles for the Next button only. Leave empty to inherit from the shared Arrows styles above.', 'kdna-listing-peek' ),
 				'content_classes' => 'elementor-descriptor',
+			)
+		);
+
+		// Icon offset sliders to nudge the icon within the button shape.
+		$this->add_responsive_control(
+			'kdna_ra_next_offset_x',
+			array(
+				'label'      => __( 'Icon Horizontal Offset', 'kdna-listing-peek' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array( 'min' => -30, 'max' => 30, 'step' => 1 ),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .kdna-remote-arrows__btn--next' => '--kdna-icon-offset-x: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'kdna_ra_next_offset_y',
+			array(
+				'label'      => __( 'Icon Vertical Offset', 'kdna-listing-peek' ),
+				'type'       => \Elementor\Controls_Manager::SLIDER,
+				'size_units' => array( 'px' ),
+				'range'      => array(
+					'px' => array( 'min' => -30, 'max' => 30, 'step' => 1 ),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .kdna-remote-arrows__btn--next' => '--kdna-icon-offset-y: {{SIZE}}{{UNIT}};',
+				),
+				'separator'  => 'after',
 			)
 		);
 
