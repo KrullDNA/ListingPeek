@@ -240,7 +240,7 @@
 .kdna-remote-arrows__btn svg {
 	display: block;
 	line-height: inherit;
-	translate: var(--kdna-icon-offset-x, 0px) var(--kdna-icon-offset-y, 0px);
+	transform: translate(var(--kdna-icon-offset-x, 0px), var(--kdna-icon-offset-y, 0px));
 }
 
 .kdna-remote-arrows__btn svg {
