@@ -129,6 +129,41 @@ class KDNA_Listing_Peek_Elementor_Extension {
 			)
 		);
 
+		$element->add_control(
+			'kdna_peek_connection_heading',
+			array(
+				'label'     => __( 'Remote Arrows', 'kdna-listing-peek' ),
+				'type'      => \Elementor\Controls_Manager::HEADING,
+				'separator' => 'before',
+			)
+		);
+
+		// Connection ID — shared with the Remote Arrows widget.
+		$element->add_control(
+			'kdna_peek_connection_id',
+			array(
+				'label'       => __( 'Connection ID', 'kdna-listing-peek' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'placeholder' => __( 'e.g. my-slider-1', 'kdna-listing-peek' ),
+				'description' => __( 'Enter the same ID on a KDNA Remote Arrows widget to control this slider remotely.', 'kdna-listing-peek' ),
+				'label_block' => true,
+			)
+		);
+
+		// Option to hide the default built-in arrows.
+		$element->add_control(
+			'kdna_peek_hide_arrows',
+			array(
+				'label'        => __( 'Hide Default Arrows', 'kdna-listing-peek' ),
+				'type'         => \Elementor\Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Yes', 'kdna-listing-peek' ),
+				'label_off'    => __( 'No', 'kdna-listing-peek' ),
+				'return_value' => 'yes',
+				'default'      => '',
+				'description'  => __( 'Hide the Listing Grid\'s built-in arrow buttons.', 'kdna-listing-peek' ),
+			)
+		);
+
 		$element->end_controls_section();
 	}
 
@@ -146,7 +181,21 @@ class KDNA_Listing_Peek_Elementor_Extension {
 
 		$settings = $widget->get_settings_for_display();
 
-		// Bail if peek is not enabled.
+		// --- Connection ID and Hide Default Arrows (work independently of peek) ---
+		$connection_id = ! empty( $settings['kdna_peek_connection_id'] )
+			? sanitize_title( $settings['kdna_peek_connection_id'] )
+			: '';
+
+		if ( $connection_id ) {
+			$widget->add_render_attribute( '_wrapper', 'data-kdna-connection-id', $connection_id );
+		}
+
+		$hide_arrows = ( ! empty( $settings['kdna_peek_hide_arrows'] ) && 'yes' === $settings['kdna_peek_hide_arrows'] );
+		if ( $hide_arrows ) {
+			$widget->add_render_attribute( '_wrapper', 'class', 'kdna-peek-hide-arrows' );
+		}
+
+		// --- Peek effect (only when enabled) ---
 		if ( empty( $settings['kdna_peek_enable'] ) || 'yes' !== $settings['kdna_peek_enable'] ) {
 			return;
 		}

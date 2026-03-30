@@ -67,6 +67,19 @@ add_action( 'plugins_loaded', 'kdna_listing_peek_init' );
 function kdna_listing_peek_load_extension() {
 	require_once KDNA_LISTING_PEEK_PATH . 'includes/class-elementor-extension.php';
 	new KDNA_Listing_Peek_Elementor_Extension();
+
+	// Register the Remote Arrows widget with Elementor.
+	add_action( 'elementor/widgets/register', 'kdna_listing_peek_register_widgets' );
+}
+
+/**
+ * Register custom Elementor widgets provided by this plugin.
+ *
+ * @param \Elementor\Widgets_Manager $widgets_manager Elementor widget manager.
+ */
+function kdna_listing_peek_register_widgets( $widgets_manager ) {
+	require_once KDNA_LISTING_PEEK_PATH . 'includes/class-remote-arrows-widget.php';
+	$widgets_manager->register( new KDNA_Remote_Arrows_Widget() );
 }
 
 /**
@@ -143,10 +156,15 @@ function kdna_listing_peek_should_enqueue() {
 		return true;
 	}
 
-	// Check Elementor data for the widget type.
+	// Check Elementor data for the widget types.
 	$elementor_data = get_post_meta( $post->ID, '_elementor_data', true );
-	if ( $elementor_data && strpos( $elementor_data, '"widgetType":"jet-listing-grid"' ) !== false ) {
-		return true;
+	if ( $elementor_data ) {
+		if ( strpos( $elementor_data, '"widgetType":"jet-listing-grid"' ) !== false ) {
+			return true;
+		}
+		if ( strpos( $elementor_data, '"widgetType":"kdna-remote-arrows"' ) !== false ) {
+			return true;
+		}
 	}
 
 	return false;
