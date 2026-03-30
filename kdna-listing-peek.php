@@ -85,7 +85,7 @@ function kdna_listing_peek_enqueue_assets() {
 	wp_register_script(
 		'kdna-listing-peek',
 		KDNA_LISTING_PEEK_URL . 'assets/js/kdna-listing-peek.js',
-		array(),
+		array( 'jquery' ),
 		KDNA_LISTING_PEEK_VERSION,
 		true
 	);
