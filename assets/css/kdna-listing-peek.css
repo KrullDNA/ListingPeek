@@ -48,6 +48,14 @@
  *    Only applied when .kdna-peek-fade is also present.
  * ---------------------------------------------------------------------- */
 
+/* When fade is OFF, forcibly remove any ::after on the wrapper.
+   JetEngine / Elementor may place their own ::after pseudo-element
+   on the widget wrapper which would otherwise bleed through. */
+.kdna-peek-active:not(.kdna-peek-fade)::after {
+	content: none !important;
+	display: none !important;
+}
+
 .kdna-peek-active.kdna-peek-fade::after {
 	content: "";
 	position: absolute;
